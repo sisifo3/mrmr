@@ -14,7 +14,7 @@ from .main import mrmr_base
 def parallel_df(func, df, series, n_jobs):
     n_jobs = min(cpu_count(), len(df.columns)) if n_jobs == -1 else min(cpu_count(), n_jobs)
     col_chunks = np.array_split(range(len(df.columns)), n_jobs)
-    lst = Parallel(n_jobs=n_jobs)(
+    lst = Parallel(n_jobs=n_jobs, prefer="threads")(
         delayed(func)(df.iloc[:, col_chunk], series)
         for col_chunk in col_chunks
     )
